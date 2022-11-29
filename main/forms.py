@@ -1,4 +1,4 @@
-from .models import Applications, User
+from .models import Applications, User, Category
 from django import forms
 from django.core.validators import RegexValidator, EmailValidator
 
@@ -52,3 +52,10 @@ class ApplicationCreateForm(forms.ModelForm):
     class Meta:
         model = Applications
         fields = ('title', 'desc', 'img')
+
+
+class CategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Category
+        fields = ['name']
