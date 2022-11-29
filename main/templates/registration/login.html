@@ -1,0 +1,89 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block links %}
+<h2>Авторизация</h2>
+<link rel="stylesheet" href="{% static 'login.css'%}">
+{% endblock %}
+{% block content %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+
+        <label for="username">Логин:</label>
+        {{ form.username }}
+        <label for="username">Пароль:</label>
+        {{ form.password }}
+
+        <input type="submit" value="Вход" class="btn btn-success"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </table>
+</form>
+
+<p>
+    <a class="header__btn" href="{% url 'register' %}">Регистрация</a>
+    <a class="header__btn" href="{% url 'home' %}">Вернуться на главную</a>
+</p>
+{% endblock %}
+
+
+<style>
+
+.requiredField {
+margin-top: 3px;
+margin-bottom: 3px;
+
+}
+input[type="submit"] {
+    cursor: pointer;
+    margin-top: 10px;
+
+}
+
+label {
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+#id_checkbox {
+    display: inline-block;
+    cursor: pointer;
+}
+input {
+    display: block;
+    margin: 0 auto;
+    padding: 3px 15px;
+    border-radius: 10px;
+    background-color: transparent;
+}
+body {
+    margin: 0;
+    background-color: #FFFBED;
+    text-align: center;
+}
+.color > a {
+    color: blue;
+}
+
+
+
+.registr__title {
+    text-align: center;
+}
+
+.header__btn {
+    padding: 10px 20px;
+    border: 1px solid #FD9339;
+    color: #FD9339;
+    border-radius: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 140px;
+    text-decoration: none;
+}
+
+
+</style>

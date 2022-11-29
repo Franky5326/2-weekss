@@ -1,0 +1,73 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h2 class="Register__title">Регистрация</h2>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ user_form|crispy }}
+        <p><input type="submit" value="Зарегистрироваться"></p>
+    </form>
+<div class="color">
+    <a href="{% url 'login' %}" class="header__btn">Войти</a>
+    <a href="{% url 'home' %}" class="header__btn">Вернуться на главную</a>
+</div>
+{% endblock %}
+
+
+
+<style>
+
+
+input[type="submit"] {
+    cursor: pointer;
+}
+
+.form-label {
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+#id_checkbox {
+    display: inline-block;
+    cursor: pointer;
+}
+input {
+    display: block;
+    margin: 0 auto;
+    padding: 3px 15px;
+    border-radius: 10px;
+    background-color: transparent;
+}
+body {
+    margin: 0;
+    background-color: #FFFBED;
+    text-align: center;
+
+}
+
+.registr__title {
+    text-align: center;
+}
+
+.header__btn {
+    padding: 10px 20px;
+    border: 1px solid #FD9339;
+    color: #FD9339;
+    border-radius: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 140px;
+    text-decoration: none;
+    color: black;
+}
+
+.header__btn:not(:last-child) {
+    margin-right: 25px;
+}
+
+</style>

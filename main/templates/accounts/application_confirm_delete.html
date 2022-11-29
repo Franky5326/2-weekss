@@ -1,0 +1,13 @@
+{% block content %}
+
+<h1>Удалить заявку</h1>
+
+<p>Вы уверены, что хотите удалить заявку: {{ application.title }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <a href="{% url 'profile_applications'%}" class="nav-link">Нет</a>
+  <input type="submit" value="Да, удалить" />
+</form>
+
+{% endblock %}
