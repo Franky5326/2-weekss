@@ -1,20 +1,15 @@
-from urllib import request
 from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
-from .forms import RegisterUserForm, ApplicationCreateForm
-from django.views import generic
-from .models import Applications
+from .forms import RegisterUserForm, CategoryForm
+from .models import Applications, Category
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView, ListView
 from django.urls import reverse_lazy
+from .filters import CategoryFilters
 
 
-class IndexView(ListView):
-    model = Applications
-    paginate_by = 4
-
-    def get_queryset(self):
-        return Applications.objects.filter(status='ready')
+def IndexView(request):
+    f = CategoryFilters(request.GET, queryset=Applications.objects.filter(status='ready'))
+    return render(request, 'users/home.html', {'filter': f})
 
 
 def register(request):
@@ -34,6 +29,12 @@ def register(request):
     return render(request, 'registration/register.html', {'user_form': user_form})
 
 
+class DeleteCategoryView(DeleteView):
+    model = Category
+    success_url = reverse_lazy('category_control')
+    template_name = 'accounts/delete_category.html'
+
+
 def profile(request):
     return render(
         request,
@@ -41,11 +42,10 @@ def profile(request):
     )
 
 
-class ViewApplications(generic.ListView):
+class ViewApplications(ListView):
     model = Applications
     paginate_by = 3
     template_name = 'accounts/application_list.html'
-    context_object_name = 'da'
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -82,3 +82,15 @@ class UpdateApplication(UpdateView):
     model = Applications
     fields = ('status', 'category')
     template_name = 'accounts/application_form.html'
+
+
+class CreateCategoryView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'accounts/create_category.html'
+    success_url = reverse_lazy('category_control')
+
+
+class CategoryControl(ListView):
+    model = Category
+    template_name = 'accounts/category_control.html'
