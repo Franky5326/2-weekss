@@ -1,0 +1,62 @@
+<style>
+    * {
+    text-align: center;
+    text-decoration: none;
+    }
+    h1 {
+    color: pink;
+    }
+    ul {
+    list-style-type: none;
+    }
+</style>
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<h1>Заявки</h1>
+<a href="{% url 'profile_applications_create' %}">Создать заявку</a>
+<div>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
+    {% else %}
+    <a href="#">Предыдущая страница</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Следуюшая страница</a>
+    {% else %}
+    <a href="#">Следуюшая страница</a>
+    {% endif %}
+</div>
+{% if applications_list %}
+<ul>
+    {% for applications in applications_list %}
+    <li class="my-3 p-3 bg-body rounded shadow-sm">
+        <div>
+            <a class="border-bottom pb-2 mb-0" href="{{ applications.get_absolute_url }}">{{ applications.title }}</a>
+            <div class="d-flex text-muted pt-3" bis_skin_checked="1">
+                <p class="pb-3 mb-0 small lh-sm border-bottom pl-3">
+                    {{ applications.desc }}
+                </p>
+                <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" src="..{{ applications.img.url }}" alt=""
+                     width="50px" height="50px">
+            </div>
+            <small class="d-block text-end mt-3">
+                <a href="{% url 'profile_application_delete' applications.id %}" class="nav-link">Удалить</a>
+                <p>{{ applications.get_status_display }}, {{ applications.get_category_display }}, Пользователь : {{ applications.user.username }}</p>
+            </small>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>There are no applications.</p>
+{% endif %}
+{% else %}
+<div class="block__footer">
+    <h1>Чтобы просмотреть заявки вам нужно авторизоваться.</h1>
+    <button><a href="{% url 'login'%}">Войти</a></button>
+</div>
+
+{% endif %}
+<a class="home2" href="{% url 'home' %}">Вернуться на главную</a>
+{%endblock%}
