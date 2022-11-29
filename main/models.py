@@ -56,6 +56,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.full_name
 
 
+class Category(models.Model):
+    id = models.AutoField(primary_key=True, unique=True, verbose_name='id')
+    name = models.CharField(max_length=30, unique=True, default='Эскиз',
+                            help_text='Категории',
+                                verbose_name='Категории',
+                            error_messages={'unique': "Такая категория уже существует!"})
+
+    class Meta:
+        verbose_name = 'Категорию'
+        verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.name
+
+
 class Applications(models.Model):
     id = models.AutoField(primary_key=True, unique=True, verbose_name='id')
     title = models.CharField(max_length=200, verbose_name='Название')
@@ -63,6 +78,10 @@ class Applications(models.Model):
     img = models.ImageField(upload_to='img', verbose_name='Фото')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Пользователь', null=True, blank=True,
                              to_field='id')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True,
+                                 verbose_name='Категории')
+
+
 
     NEW = 'new'
     LOAD = 'load'
@@ -76,16 +95,6 @@ class Applications(models.Model):
     status = models.CharField(max_length=30, choices=LOAN_STATUS, default='new', help_text='Статус',
                               verbose_name='Статус')
 
-    SKETCH = 'sketch'
-    MID_DETAIL = 'mid_detail'
-    AUTHOR = 'author'
-    CATEGORIES = (
-        (SKETCH, 'Эскиз'),
-        (MID_DETAIL, 'Средняя детализация'),
-        (AUTHOR, 'Авторский интерьер'),
-    )
-    category = models.CharField(max_length=30, choices=CATEGORIES, default='1', help_text='Категории',
-                                verbose_name='Категории')
 
     def __str__(self):
         return self.title
