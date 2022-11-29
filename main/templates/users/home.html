@@ -8,6 +8,7 @@
     <meta name="description" content="">
     {% load static %}
     <link rel="stylesheet" href="{% static 'catalog/design_list.css' %}">
+     <script src="{% static 'js/jquery.min.js' %}"></script>
     {%block title%} <title>Дизайн студия</title> {%endblock%}
 
 <link href="../assets/dist/css/bootstrap.min.css">
@@ -15,30 +16,55 @@
   </head>
   <body class="d-flex h-100 text-center text-bg-dark">
 
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <nav class="nav nav-masthead justify-content-center">
+        <a class="nav-link fw-bold py-1 px-0 active" aria-current="page"
+           href="#">Домашняя страница</a>
+        {% if user.is_authenticated %}
+          {%if user.is_staff %}
+            <a class="nav-link fw-bold py-1 px-0" href="{% url 'profile_applications' %}">Контроль заявок</a>
+            <a class="nav-link fw-bold py-1 px-0" href="{% url 'category_control' %}">Управление
+                категориями</a>
+          {%endif%}
+          <a class="nav-link fw-bold py-1 px-0" href="#">Создать заявку</a>
+          <a class="nav-link fw-bold py-1 px-0" href="#">Пользователь: {{ user.get_username }}</a>
+          <a class="nav-link fw-bold py-1 px-0" href="{% url 'logout'%}?next={{request.path}}">Выход</a>
+          {%else%}
+          <a class="nav-link fw-bold py-1 px-0" href="{% url 'login'%}?next={{request.path}}">авторизация</a>
+          <a class="nav-link fw-bold py-1 px-0" href="{% url 'register' %}?next={{request.path}}">Регистрация</a>
+          {%endif%}
+      </nav>
+    </div>
+  </header>
 
+  <div class="text-center" style="margin-top:40px; margin-bottom:40px">
+      <form method="get" id="filter">
 
-    {% if Applications_list %}
+        {{ filter.form.as_p }}
+        <input type="submit" class="filter-button">
+      </form>
+    </div>
+
+  {% block content %}
     <div class="main">
-      {% for Applications in Applications_list %}
+      {% for applications in filter.qs%}
       <div class="design">
-        <p>Название: {{ Applications.title }}</p>
-        <img src="{{ Applications.img.url}}" alt="connect" style="max-height:150px">
-        <p>Описание: {{ Applications.desc }}</p>
-        <p>Cтатус: {{ Applications.get_status_display }}</p>
-        <p>Категория: {{ Applications.category }}</p>
+        <p>Название: {{ applications.title }}</p>
+        <img src="{{ applications.img.url }}" alt="connect" style="max-height:150px">
+        <p>Cтатус: {{ applications.get_status_display }}</p>
         {% if user.is_staff %}
-        <p>Пользователь : {{ Applications.user.get_username }}</p>
+          <p>Пользователь : {{ applications.user.get_username }}</p>
         {% endif %}
       </div>
-      {% endfor %}
+      {%endfor%}
     </div>
-    {% else %}
-      <p>Заявок нет</p>
-    {% endif %}
   <footer class="mt-auto text-white-50">
-
+    <p><strong>Работ принятых в работу: </strong> {{ design_list|length }}</p>
+    <p>Floppa</a>.</p>
   </footer>
-
+  {% endblock %}
 </div>
 </body>
 </html>
