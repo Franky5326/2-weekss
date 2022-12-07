@@ -1,37 +1,36 @@
-<style>
-    * {
-    text-align: center;
-    text-decoration: none;
-    }
-    h1 {
-    color: pink;
-    }
-    ul {
-    list-style-type: none;
-    }
-</style>
+{% load static %}
+{%block title%} <title>Дизайн студия</title> {%endblock%}
+<link type="text/css" href="{% static 'main/css/applications.css' %}" rel="stylesheet"/>
 {% block content %}
 
 {% if request.user.is_authenticated %}
-<h1>Заявки</h1>
-<a href="{% url 'profile_applications_create' %}">Создать заявку</a>
-<div>
-    {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
-    {% else %}
-    <a href="#">Предыдущая страница</a>
-    {% endif %}
-    {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Следуюшая страница</a>
-    {% else %}
-    <a href="#">Следуюшая страница</a>
-    {% endif %}
-</div>
+<h1 class="txt">Заявки</h1>
+<nav class="container header__content">
+    <a class="header__btn header__btn__first" href="{% url 'profile_applications_create' %}">Создать заявку</a>
+    <a class="header__btn header__btn__first" href="{% url 'home' %}">Вернутся на главную</a>
+    <div class="header__flex">
+        {% if page_obj.has_previous %}
+        <a class="header__btn " href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
+        {% else %}
+        <a class="header__btn" href="#">Предыдущая страница</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a class="header__btn" href="?page={{ page_obj.next_page_number }}">Следуюшая страница</a>
+        {% else %}
+        <a class="header__btn" href="#">Следуюшая страница</a>
+        {% endif %}
+    </div>
+</nav>
+<form method="get" id="filter">
+
+    {{ filter.form.as_p }}
+    <input type="submit" class="filter-button">
+</form>
 {% if applications_list %}
 <ul>
     {% for applications in applications_list %}
     <li class="my-3 p-3 bg-body rounded shadow-sm">
-        <div>
+        <div class="border__box">
             <a class="border-bottom pb-2 mb-0" href="{{ applications.get_absolute_url }}">{{ applications.title }}</a>
             <div class="d-flex text-muted pt-3" bis_skin_checked="1">
                 <p class="pb-3 mb-0 small lh-sm border-bottom pl-3">
@@ -42,7 +41,8 @@
             </div>
             <small class="d-block text-end mt-3">
                 <a href="{% url 'profile_application_delete' applications.id %}" class="nav-link">Удалить</a>
-                <p>{{ applications.get_status_display }}, {{ applications.get_category_display }}, Пользователь : {{ applications.user.username }}</p>
+                <p>{{ applications.get_status_display }}, {{ applications.get_category_display }}, Пользователь : {{
+                    applications.user.username }}</p>
             </small>
         </div>
     </li>
@@ -58,5 +58,5 @@
 </div>
 
 {% endif %}
-<a class="home2" href="{% url 'home' %}">Вернуться на главную</a>
+
 {%endblock%}

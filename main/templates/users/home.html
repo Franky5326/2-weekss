@@ -1,70 +1,74 @@
 <!doctype html>
 <html lang="en" class="h-100">
-  <head>
+<head>
     <meta charset="utf-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'catalog/design_list.css' %}">
-     <script src="{% static 'js/jquery.min.js' %}"></script>
-    {%block title%} <title>Дизайн студия</title> {%endblock%}
 
-<link href="../assets/dist/css/bootstrap.min.css">
+    <link type="text/css" href="{% static 'main/css/style.css' %}" rel="stylesheet"/>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    {%block title%} <title>Disign.pro</title> {%endblock%}
 
-  </head>
-  <body class="d-flex h-100 text-center text-bg-dark">
+</head>
+<body>
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-  <header class="mb-auto">
-    <div>
-      <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link fw-bold py-1 px-0 active" aria-current="page"
-           href="#">Домашняя страница</a>
-        {% if user.is_authenticated %}
-          {%if user.is_staff %}
-            <a class="nav-link fw-bold py-1 px-0" href="{% url 'profile_applications' %}">Контроль заявок</a>
-            <a class="nav-link fw-bold py-1 px-0" href="{% url 'category_control' %}">Управление
-                категориями</a>
-          {%endif%}
-          <a class="nav-link fw-bold py-1 px-0" href="#">Создать заявку</a>
-          <a class="nav-link fw-bold py-1 px-0" href="#">Пользователь: {{ user.get_username }}</a>
-          <a class="nav-link fw-bold py-1 px-0" href="{% url 'logout'%}?next={{request.path}}">Выход</a>
-          {%else%}
-          <a class="nav-link fw-bold py-1 px-0" href="{% url 'login'%}?next={{request.path}}">авторизация</a>
-          <a class="nav-link fw-bold py-1 px-0" href="{% url 'register' %}?next={{request.path}}">Регистрация</a>
-          {%endif%}
-      </nav>
+    <header class="header">
+        <div>
+            <nav class="container header__content">
+                <a class="header__logo" aria-current="page"
+                   href="{% url 'home'%}?next={{request.path}}">Disign.pro</a>
+                {% if user.is_authenticated %}
+                {%if user.is_staff %}
+                <a class="header__btn" href="{% url 'category_control' %}">Управление
+                    категориями</a>
+                {%endif%}
+                <a class="header__btn " href="{% url 'profile'%}?next={{request.path}}">Профиль: {{ user.get_username }}</a>
+                <a class="header__btn " href="{% url 'logout'%}?next={{request.path}}">Выход</a>
+                {%else%}
+                <a class="header__btn " href="{% url 'login'%}?next={{request.path}}">авторизация</a>
+                <a class="header__btn " href="{% url 'register' %}?next={{request.path}}">Регистрация</a>
+                {%endif%}
+            </nav>
+        </div>
+    </header>
+
+    <section class="about__text">
+        <h1>Добро пожаловать в нашу студию Disign.pro</h1>
+        <p1>Мы занимаемся разработкой дизайна интерьеров для ваших помещений <br>
+            Мы поможем вам разработать дизайн интерьера в различных стилях, <br>
+            Сделаем все быстро и не дорого, оставить заявку вы можете в <br>
+            "Личном кабинете" у нас на сайте, с примерами работ.
+        </p1>
+
+
+        <h2 class="text__botom">Примеры наших работ:</h2>
+    </section>
+
+    <div class="text-center" style="margin-top:40px; margin-bottom:40px">
+        <form method="get" id="filter">
+
+            {{ filter.form.as_p }}
+            <input type="submit" class="filter-button">
+        </form>
     </div>
-  </header>
 
-  <div class="text-center" style="margin-top:40px; margin-bottom:40px">
-      <form method="get" id="filter">
-
-        {{ filter.form.as_p }}
-        <input type="submit" class="filter-button">
-      </form>
-    </div>
-
-  {% block content %}
+    {% block content %}
     <div class="main">
-      {% for applications in filter.qs%}
-      <div class="design">
-        <p>Название: {{ applications.title }}</p>
-        <img src="{{ applications.img.url }}" alt="connect" style="max-height:150px">
-        <p>Cтатус: {{ applications.get_status_display }}</p>
-        {% if user.is_staff %}
-          <p>Пользователь : {{ applications.user.get_username }}</p>
-        {% endif %}
-      </div>
-      {%endfor%}
+        {% for applications in filter.qs%}
+        <div class="design">
+            <p>Название: {{ applications.title }}</p>
+            <img src="{{ applications.img.url }}" alt="connect" style="max-height:150px">
+            <p>Cтатус: {{ applications.get_status_display }}</p>
+            {% if user.is_staff %}
+            <p>Пользователь : {{ applications.user.get_username }}</p>
+            {% endif %}
+        </div>
+        {%endfor%}
+
+        {% endblock %}
     </div>
-  <footer class="mt-auto text-white-50">
-    <p><strong>Работ принятых в работу: </strong> {{ design_list|length }}</p>
-    <p>Floppa</a>.</p>
-  </footer>
-  {% endblock %}
-</div>
+
 </body>
 </html>

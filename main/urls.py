@@ -9,7 +9,6 @@ from .views import IndexView, CreateCategoryView
 
 urlpatterns = [
     path('', IndexView, name='home'),
-    path('', RedirectView.as_view(url='/home/', permanent=True)),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     path('profile/applications', views.ViewApplications.as_view(), name='profile_applications'),

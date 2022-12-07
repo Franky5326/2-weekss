@@ -13,7 +13,7 @@
 <h1>Название заявки: {{ applications.title }}</h1>
 <h2>Описание: {{ applications.desc }}</h2>
 <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" src="../../..{{ applications.img.url }}" alt="" width="700px">
-<p>{{ applications.get_status_display }}, {{ applications.get_category_display }}, Пользователь: {{ applications.user.username }}</p>
+<p>{{ applications.get_status_display }}, {{ applications.get_category.name }}, Пользователь: {{ applications.user.username }}</p>
 {% if user.is_staff %}<a href="{% url 'profile_application_update' applications.id %}">Изменить</a>{% endif %}
 <a href="{% url 'home'%}" class="nav-link">Вернуться на главную</a>
 {% endblock %}

@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView, ListView
 from django.urls import reverse_lazy
 from .filters import CategoryFilters
+from django.contrib.auth.decorators import login_required
 
 
 def IndexView(request):
@@ -52,6 +53,14 @@ class ViewApplications(ListView):
             return Applications.objects.filter()
         else:
             return Applications.objects.filter(user__exact=self.request.user.id)
+
+
+
+
+@login_required
+def my_post(request):
+    f = CategoryFilters(request.GET, queryset=Applications.objects.filter(status='ready'))
+    return render(request, 'accounts/application_list.html', {'filter': f})
 
 
 class CreateApplication(CreateView):
